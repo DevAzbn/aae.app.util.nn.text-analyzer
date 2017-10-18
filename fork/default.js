@@ -38,7 +38,10 @@ if(_data.input && _data.input.length) {
 	
 	/* ---------- */
 	
-	var str = _data.input.toUpperCase();
+	var str = _data.input
+		.trim()
+		.toUpperCase()
+	;
 	
 	var str_arr = str.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g, ' ').split(' ');
 	
@@ -54,6 +57,9 @@ if(_data.input && _data.input.length) {
 		__symbol_length = str.length,
 		__word_length = str_arr.length,
 		__non_words = 0,
+		__has_numbers = /\d/.test(str),
+		__is_exclamation = /[!]/.test(str),
+		__is_question = /[?]/.test(str),
 		__
 	;
 	
@@ -96,6 +102,9 @@ if(_data.input && _data.input.length) {
 		1 / (__symbol_length || 1), // количество символов
 		1 / (__word_length || 1), // количество слов
 		(__non_words / (__word_length || 1)),  // доля несуществующих слов
+		(__has_numbers ? 1 : 0), // есть числа в строке
+		(__is_exclamation ? 1 : 0),
+		(__is_question ? 1 : 0),
 	];
 	
 	/* ---------- */
