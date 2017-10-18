@@ -1,0 +1,4 @@
+{
+	"hiddenLayers" : [256, 64],
+	"learningRate" : 0.1
+}
