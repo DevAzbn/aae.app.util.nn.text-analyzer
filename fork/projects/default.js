@@ -1,7 +1,7 @@
 'use strict';
 
-var __path_prefix = '../';
-var __json_prefix = __path_prefix + '../data/';
+var __path_prefix = '../../';
+var __json_prefix = __path_prefix + 'data/';
 
 var azbn = new require(__dirname + '/' + __path_prefix + '../../../../../system/bootstrap')({
 	

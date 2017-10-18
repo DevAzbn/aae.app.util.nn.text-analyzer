@@ -16,7 +16,7 @@ var argv = require('optimist')
 
 app.clearRequireCache(require);
 
-app.fork(argv.project, argv, function(_process, _msg){
+app.fork('projects/' + argv.project, argv, function(_process, _msg){
 	
 	if(_msg.kill_child == 1) {
 		_process.kill();
