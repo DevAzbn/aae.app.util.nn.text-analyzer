@@ -7,7 +7,7 @@ var azbn = new require(__dirname + '/' + __path_prefix + '../../../../../system/
 	
 });
 
-var app = azbn.loadApp(module);
+var app = azbn.loadApp(module, '/' + __path_prefix);
 
 var _data = azbn.mdl('process/child').parseCliData(process.argv);
 
@@ -29,8 +29,8 @@ if(_data.input && _data.input.length) {
 	
 	var nn_uid = 'default';
 	
-	var config_data = app.loadJSON(__json_prefix + 'config/' + nn_uid);
-	var nn_data = app.loadJSON(__json_prefix + 'nn/' + nn_uid);
+	var config_data = app.loadJSON('config/' + nn_uid);
+	var nn_data = app.loadJSON('nn/' + nn_uid);
 	
 	var nn = new brain.NeuralNetwork(config_data);
 	
@@ -114,6 +114,8 @@ if(_data.input && _data.input.length) {
 	process.send({
 		kill_child : 1,
 		app_fork : 1,
+		//data : config_data,
+		
 		data : {
 			src : {
 				text : _data.input,
@@ -124,6 +126,7 @@ if(_data.input && _data.input.length) {
 			input : _input,
 			output : _output,
 		},
+		
 	});
 	
 } else {
