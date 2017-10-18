@@ -14,16 +14,27 @@ var _data = azbn.mdl('process/child').parseCliData(process.argv);
 
 var brain = require('brain.js');
 var Morphy = require('phpmorphy').default;
-const morphy = new Morphy('ru', {
-	//nojo : false, 
-	storage : Morphy.STORAGE_MEM,
-	predict_by_suffix : true,
-	predict_by_db : true,
-	graminfo_as_text : true,
-	use_ancodes_cache : false,
-	resolve_ancodes : Morphy.RESOLVE_ANCODES_AS_TEXT,
-});
 
+var morphy = {
+	ru : new Morphy('ru', {
+		//nojo : false, 
+		storage : Morphy.STORAGE_MEM,
+		predict_by_suffix : true,
+		predict_by_db : true,
+		graminfo_as_text : true,
+		use_ancodes_cache : false,
+		resolve_ancodes : Morphy.RESOLVE_ANCODES_AS_TEXT,
+	}),
+	en : new Morphy('en', {
+		//nojo : false, 
+		storage : Morphy.STORAGE_MEM,
+		predict_by_suffix : true,
+		predict_by_db : true,
+		graminfo_as_text : true,
+		use_ancodes_cache : false,
+		resolve_ancodes : Morphy.RESOLVE_ANCODES_AS_TEXT,
+	}),
+}
 
 if(_data.input && _data.input.length) {
 	
@@ -43,7 +54,7 @@ if(_data.input && _data.input.length) {
 		.toUpperCase()
 	;
 	
-	var str_arr = str.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\[\]]/g, ' ').split(' ');
+	var str_arr = str.replace(/[.,\/#!?$%\^&\*;:{}=\-_`~()\[\]]/g, ' ').split(' ');
 	
 	for(var k in str_arr) {
 		if(str_arr[k] == '') {
@@ -60,6 +71,8 @@ if(_data.input && _data.input.length) {
 		__has_numbers = /\d/.test(str),
 		__is_exclamation = /[!]/.test(str),
 		__is_question = /[?]/.test(str),
+		__lang_is_ru = /[А-Яа-я]/.test(str),
+		__lang_is_en = /[A-Za-z]/.test(str),
 		__
 	;
 	
@@ -67,7 +80,7 @@ if(_data.input && _data.input.length) {
 	
 	for(var i = 0; i < str_arr.length; i++) {
 		
-		var _bf = morphy.getBaseForm(str_arr[i], Morphy.NORMAL);
+		var _bf = morphy[__lang_is_ru ? 'ru' : 'en'].getBaseForm(str_arr[i], Morphy.NORMAL);
 		
 		switch(typeof _bf) {
 			
@@ -99,12 +112,15 @@ if(_data.input && _data.input.length) {
 	}
 	
 	var _input = [
-		1 / (__symbol_length || 1), // количество символов
-		1 / (__word_length || 1), // количество слов
-		(__non_words / (__word_length || 1)),  // доля несуществующих слов
+		-1 / (__symbol_length + 1), // количество символов
+		-1 / (__word_length + 1), // количество слов
+		-1 / (__non_words + 1),  // количество несуществующих в словаре слов
+		(__non_words / (__word_length || 1)), // доля несуществующих слов
 		(__has_numbers ? 1 : 0), // есть числа в строке
-		(__is_exclamation ? 1 : 0),
-		(__is_question ? 1 : 0),
+		(__is_exclamation ? 1 : 0), // восклицание
+		(__is_question ? 1 : 0), // вопрос
+		(__lang_is_ru ? 1 : 0), // есть русские буквы
+		(__lang_is_en ? 1 : 0), // есть латинские буквы
 	];
 	
 	/* ---------- */
