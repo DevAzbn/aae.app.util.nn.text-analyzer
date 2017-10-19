@@ -71,12 +71,16 @@ if(_data.input && _data.input.length) {
 		__has_numbers = /\d/.test(str),
 		__is_exclamation = /[!]/.test(str),
 		__is_question = /[?]/.test(str),
-		__lang_is_ru = /[А-Яа-я]/.test(str),
+		__lang_is_ru = /[А-Яа-яЁё]/.test(str),
 		__lang_is_en = /[A-Za-z]/.test(str),
+		__is_personal_i = /(^|[\s\.\,\;\:])+(Я|МЕНЯ|МНЕ|МНОЙ|МНОЮ|МЫ|НАС|НАМ|НАМИ|I|ME|WE|US)+($|[\s\.\,\;\:])/.test(str), // https://ru.wikipedia.org/wiki/Личные_местоимения
+		__is_personal_you = /(^|[\s\.\,\;\:])+(ТЫ|ТЕБЯ|ТЕБЕ|ТОБОЙ|ТОБОЮ|ВЫ|ВАС|ВАМ|ВАМИ|YOU)+($|[\s\.\,\;\:])/.test(str),
 		__
 	;
 	
 	var words = [];
+	
+	var partsOfSpeech = {};
 	
 	for(var i = 0; i < str_arr.length; i++) {
 		
@@ -91,6 +95,12 @@ if(_data.input && _data.input.length) {
 			
 			case 'string' : {
 				words.push(_bf);
+				var _pos = morphy[__lang_is_ru ? 'ru' : 'en'].getPartOfSpeech(_bf, Morphy.NORMAL);
+				if(partsOfSpeech[_pos]) {
+					partsOfSpeech[_pos]++;
+				} else {
+					partsOfSpeech[_pos] = 1;
+				}
 			}
 			break;
 			
@@ -98,6 +108,12 @@ if(_data.input && _data.input.length) {
 			case 'array' : {
 				for(var k in _bf) {
 					words.push(_bf[k]);
+					var _pos = morphy[__lang_is_ru ? 'ru' : 'en'].getPartOfSpeech(_bf[k], Morphy.NORMAL);
+					if(partsOfSpeech[_pos]) {
+						partsOfSpeech[_pos]++;
+					} else {
+						partsOfSpeech[_pos] = 1;
+					}
 				}
 			}
 			break;
@@ -121,6 +137,8 @@ if(_data.input && _data.input.length) {
 		(__is_question ? 1 : 0), // вопрос
 		(__lang_is_ru ? 1 : 0), // есть русские буквы
 		(__lang_is_en ? 1 : 0), // есть латинские буквы
+		(__is_personal_i ? 1 : 0), // есть личностное местоимение (я, мы)
+		(__is_personal_you ? 1 : 0), // есть личностное местоимение (ты, вы)
 	];
 	
 	/* ---------- */
@@ -137,6 +155,7 @@ if(_data.input && _data.input.length) {
 				text : _data.input,
 				as_string : str,
 				as_array : str_arr,
+				//partsOfSpeech : partsOfSpeech,
 				words : words.join(),
 			},
 			input : _input,
