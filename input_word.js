@@ -28,7 +28,7 @@ process.stdin.on('data', function(msg){
 			
 			data.word = msg.trim().toUpperCase();
 			
-			console.log('Абстрактное понятие? 0 - абстрактное, 1 - вещественное');
+			console.log('Вещественное понятие? 0 - абстрактное, 1 - вещественное');
 			
 		}
 		break;
@@ -43,6 +43,15 @@ process.stdin.on('data', function(msg){
 		break;
 		
 		case 2 : {
+			
+			data.metrics.push(parseFloat(msg.trim().toUpperCase()));
+			
+			console.log('Эмоциональная окраска слова: от -1 до 1');
+			
+		}
+		break;
+		
+		case 3 : {
 			
 			data.metrics.push(parseFloat(msg.trim().toUpperCase()));
 			
