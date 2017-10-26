@@ -54,7 +54,9 @@ if(_data.input && _data.input.length) {
 		.toUpperCase()
 	;
 	
-	var str_arr = str.replace(/[.,\/#!?$%\^&\*;:{}=\-_`~()\[\]]/g, ' ').split(' ');
+	//var str_arr = str.replace(/[.,\/#!?$%\^&\*;:{}=\-_`~()\[\]]/g, ' ').split(' ');
+	
+	var str_arr = app.mdl('text').removePunctuation(str).split(' ');
 	
 	for(var k in str_arr) {
 		if(str_arr[k] == '') {
