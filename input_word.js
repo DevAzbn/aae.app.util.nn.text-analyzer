@@ -57,7 +57,7 @@ process.stdin.on('data', function(msg){
 			
 			app.mkDataDir('words/' + wpath);
 			
-			app.saveJSON('words/' + wpath + '/metrics', data.metrics);
+			app.saveJSON('words/' + wpath + '/data', data);
 			
 			process.exit();
 			
