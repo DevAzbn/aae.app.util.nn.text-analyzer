@@ -6,7 +6,7 @@ var azbn = new require(__dirname + '/../../../../../system/bootstrap')({
 
 var app = azbn.loadApp(module);
 
-var test = 'Привет! Как дела? Z crexf. 98 попугаев! Я хочу тебя навестить...\nКогда будешь свободен?';
+var test = app.loadFile('text/default.txt');
 
 app.clearRequireCache(require);
 

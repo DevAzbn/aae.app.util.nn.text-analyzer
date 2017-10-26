@@ -16,6 +16,11 @@ var _ = function(app, p) {
 			var _str = (str || '').trim();
 			
 			_str = _str
+				.replace(/\r/g, '\n')
+				.replace(/[\n]{1,}/g, '\n')
+			;
+			
+			_str = _str
 				//.replace(/\.\s([A-ZА-ЯЁ])/g, '$1' + _rs + '$2')
 				.replace(_re, '$1' + _rs + '$3')
 			;
@@ -27,7 +32,7 @@ var _ = function(app, p) {
 		removePunctuation : function(str) {
 			
 			//var _re = new RegExp('[\.,\/#!?$%\^&\*;:{}=\-_`~()\[\]]', 'g');//im
-			var _re = /[.,\/#!?$%\^&\*;:{}=\-_`~()\[\]]/g;
+			var _re = /[.,\/#!?$%\^&\*;:{}=\-_`~()\[\]<>«»]/g;
 			
 			return str.replace(_re, ' ');
 			
